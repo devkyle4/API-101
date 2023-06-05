@@ -56,21 +56,45 @@ async function createProduct(req, res) {
 //@route PUT /api/products/:id
 async function updateProduct(req, res, id) {
   try {
-    const body = await getPostData(req);
+    const product = await Products.findById(id);
 
-    const productData = Products.findById(id);
+    if (!product) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "Product Not Found!" }));
+    } else {
+      const body = await getPostData(req);
 
-    const { title, description, price } = JSON.parse(body);
-    const product = {
-      title: title || product.title,
-      description: description || product.description,
-      price: price || product.price,
-    };
+      const { title, description, price } = JSON.parse(body);
 
-    const updatedProduct = await Products.update(productData);
+      const productData = {
+        title: title || product.title,
+        description: description || product.description,
+        price: price || product.description,
+      };
 
-    res.writeHead(201, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(updatedProduct));
+      const updatedProduct = await Products.update(productData, id);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(updatedProduct));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// @desc delete product
+//@route DELETE /api/products/:id
+async function deleteProduct(req, res, id) {
+  try {
+    const product = await Products.findById(id);
+
+    if (!product) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "Product Not Found!" }));
+    } else {
+      await Products.remove(id);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: `Product with ${id} deleted` }));
+    }
   } catch (error) {
     console.log(error);
   }
@@ -81,4 +105,5 @@ module.exports = {
   getProduct,
   createProduct,
   updateProduct,
+  deleteProduct
 };
