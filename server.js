@@ -1,11 +1,20 @@
 const http = require("http");
 const {
-  getProducts,
-  getProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} = require("./Controllers/productController.js");
+  getCharacters,
+  addCharacter,
+  getCharacter,
+  updateCharacter,
+  deleteCharacter,
+} = require("./controllers/charactersController");
+
+mongoose
+  .connect(
+    "mongodb+srv://devkyle4:DC_API@cluster0.fv9xhpc.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log("Database successfully connected!!");
+  })
+  .catch((err) => console.log(err));
 
 const server = http.createServer((req, res) => {
   if (req.url === "/api/products" && req.method === "GET") {
