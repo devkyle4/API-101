@@ -10,7 +10,7 @@ const {
 
 mongoose
   .connect(
-    "mongodb+srv://devkyle4:DC_API@cluster0.fv9xhpc.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://devkyle4:###@###.fv9xhpc.mongodb.net/?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Database successfully connected!!");
